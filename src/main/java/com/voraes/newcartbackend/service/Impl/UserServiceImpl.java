@@ -6,8 +6,11 @@ import com.voraes.newcartbackend.entity.Order;
 import com.voraes.newcartbackend.entity.User;
 import com.voraes.newcartbackend.repository.UserRepository;
 import com.voraes.newcartbackend.service.UserService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,23 +19,27 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository){
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
     @Override
-    public void registerUser(UserDTO userDTO) {
-
-        List<Address> addresses = new ArrayList<>();
-        List<Order> orders = new ArrayList<>();
-
-        User newUser = new User();
-        newUser.setUsername(userDTO.getUsername());
-        newUser.setPassword(userDTO.getPassword());
-        newUser.setEmail(userDTO.getEmail());
-        newUser.setRole("USER");
-        newUser.setAddresses(addresses);
-        newUser.setOrders(orders);
-
-        userRepository.save(newUser);
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+
 }

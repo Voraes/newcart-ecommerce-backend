@@ -1,8 +1,11 @@
 package com.voraes.newcartbackend.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,16 +18,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "name", unique = true)
+    @NotEmpty(message = "Name cannot be empty")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters")
     private String name;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "description")
+    @NotEmpty(message = "Description cannot be empty")
     private String description;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = "price")
+    @NotNull
     private double price;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url")
+    @NotEmpty(message = "Image URL cannot be empty")
     private String imageUrl;
 
     @ManyToOne

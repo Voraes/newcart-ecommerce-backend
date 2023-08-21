@@ -1,7 +1,9 @@
 package com.voraes.newcartbackend.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -20,9 +22,11 @@ public class CartItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
+    @NotNull
     private int quantity;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price")
+    @NotNull
     private double totalPrice;
 }
