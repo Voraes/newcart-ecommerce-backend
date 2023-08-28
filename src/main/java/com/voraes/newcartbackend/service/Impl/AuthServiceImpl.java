@@ -1,16 +1,17 @@
 package com.voraes.newcartbackend.service.Impl;
 
+import com.voraes.newcartbackend.DTO.LoginDTO;
 import com.voraes.newcartbackend.DTO.UserDTO;
 import com.voraes.newcartbackend.entity.Address;
 import com.voraes.newcartbackend.entity.Order;
 import com.voraes.newcartbackend.entity.User;
 import com.voraes.newcartbackend.repository.UserRepository;
 import com.voraes.newcartbackend.service.AuthService;
-import com.voraes.newcartbackend.util.JwtUtils;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +27,14 @@ public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthenticationManager authenticationManager;
+    private final UserDetailsService userDetailsService;
 
-    private final JwtUtils jwtUtils;
-
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
+        //this.authenticationManager = authenticationManager;
+        //this.jwtUtils = jwtUtils;
+        this.userDetailsService = userDetailsService;
     }
 
 
@@ -56,15 +56,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void loginUser(UserDTO userDTO) {
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                userDTO.getUsername(), userDTO.getPassword()
-        );
+    public String loginUser(LoginDTO loginDTO) {
 
-        Authentication authentication = authenticationManager.authenticate(token);
+        String email = loginDTO.getUsername();
+        String loginPassword = loginDTO.getPassword();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails user = userDetailsService.loadUserByUsername(email);
 
-        jwtUtils.generateToken(authentication);
+        String dbPassword = user.getPassword();
+
+        if (passwordEncoder.matches(loginPassword, dbPassword)) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            return "Login successful";
+        }
+        else {
+            return "Invalid credentials";
+        }
     }
 }

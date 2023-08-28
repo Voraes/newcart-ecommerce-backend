@@ -1,5 +1,6 @@
 package com.voraes.newcartbackend.controller;
 
+import com.voraes.newcartbackend.DTO.LoginDTO;
 import com.voraes.newcartbackend.DTO.UserDTO;
 import com.voraes.newcartbackend.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -26,9 +27,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody UserDTO userDTO){
-        authService.loginUser(userDTO);
-        return ResponseEntity.ok("User logged in successfully");
+    public ResponseEntity<String> loginUser(@RequestBody LoginDTO loginDTO){
+        String loginUser = authService.loginUser(loginDTO);
+        return ResponseEntity.ok(loginUser);
     }
 
     // TODO Logout

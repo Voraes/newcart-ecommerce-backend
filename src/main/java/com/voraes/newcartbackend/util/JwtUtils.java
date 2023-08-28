@@ -1,8 +1,7 @@
-package com.voraes.newcartbackend.util;
+/*package com.voraes.newcartbackend.util;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -21,4 +20,4 @@ public class JwtUtils {
             .signWith(SignatureAlgorithm.HS512, "secret")
             .compact();
     }
-}
+}*/
