@@ -3,6 +3,7 @@ package com.voraes.newcartbackend.service.Impl;
 import com.voraes.newcartbackend.entity.User;
 import com.voraes.newcartbackend.repository.UserRepository;
 import com.voraes.newcartbackend.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public UserDetails findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 

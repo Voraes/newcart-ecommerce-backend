@@ -32,8 +32,6 @@ public class AuthServiceImpl implements AuthService {
     public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        //this.authenticationManager = authenticationManager;
-        //this.jwtUtils = jwtUtils;
         this.userDetailsService = userDetailsService;
     }
 
@@ -58,10 +56,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String loginUser(LoginDTO loginDTO) {
 
-        String email = loginDTO.getUsername();
+        String username = loginDTO.getUsername();
         String loginPassword = loginDTO.getPassword();
 
-        UserDetails user = userDetailsService.loadUserByUsername(email);
+        UserDetails user = userDetailsService.loadUserByUsername(username);
 
         String dbPassword = user.getPassword();
 
